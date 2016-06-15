@@ -11,7 +11,7 @@
     "selector",
     "rules"
   ],
-  "author": "George Adamson <george.adamson@baesystems.com>",
+  "author": "George Adamson <george@adamson.com>",
   "license": "MIT",
   "repository": "georgeadamson/postcss-merge-selectors",
   "bugs": {
