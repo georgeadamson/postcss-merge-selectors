@@ -1,0 +1,35 @@
+{
+  "name": "postcss-merge-selectors",
+  "version": "0.0.0",
+  "description": "PostCSS plugin to combine selectors that have duplicate rules. Can be configured to skip or only apply to specific rules.",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "dedupe",
+    "merge",
+    "selector",
+    "rules"
+  ],
+  "author": "George Adamson <george.adamson@baesystems.com>",
+  "license": "MIT",
+  "repository": "georgeadamson/postcss-merge-selectors",
+  "bugs": {
+    "url": "https://github.com/georgeadamson/postcss-merge-selectors/issues"
+  },
+  "homepage": "https://github.com/georgeadamson/postcss-merge-selectors",
+  "dependencies": {
+    "postcss": "^5.0.21"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "eslint": "^2.10.0",
+    "eslint-config-postcss": "^2.0.2"
+  },
+  "scripts": {
+    "test": "ava && eslint *.js"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-postcss/es5"
+  }
+}
