@@ -4,8 +4,12 @@
 const postcss = require('postcss');
 const list    = postcss.list;
 
+function byDecl (node){
+  return (node || this).type === 'decl';
+}
+
 function serialiseDeclarations (rule) {
-  var nodes = rule.nodes ? rule.nodes.sort().map(String) : [];
+  var nodes = rule.nodes ? rule.nodes.filter(byDecl).sort().map(String) : [];
   return nodes.join(';').replace(/\s+/g,'');
 }
 
@@ -25,12 +29,13 @@ function unique (value, index, self) {
   return self.indexOf(value) === index;
 }
 
-function selectorMerger (groupOpts) {
+function selectorMerger (matcherOpts) {
   const cache = {};
 
   return function analyseRule (ruleB) {
 
     const decl = serialiseDeclarations(ruleB);
+    if (matcherOpts.debug) console.log(decl);
 
     if (cache[decl]) {
 
@@ -39,7 +44,7 @@ function selectorMerger (groupOpts) {
       const b = list.comma(ruleB.selector);
       const mergedSelector = a.concat(b).filter(unique).join(', ');
 
-      if (groupOpts.promote){
+      if (matcherOpts.promote){
         ruleB.selector = mergedSelector;
         ruleA.remove();
         cache[decl] = ruleB;
@@ -64,7 +69,7 @@ module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
 
   const DEFAULT_FILTER = /.*/;
   const DEFAULT_OPTIONS = {
-    groups : {
+    matchers : {
       default : {
         selectorFilter : DEFAULT_FILTER,
         promote        : false
@@ -73,15 +78,17 @@ module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
   };
 
   opts = Object.assign({}, DEFAULT_OPTIONS, opts);
+  const matchers = Object.keys(opts.matchers || DEFAULT_OPTIONS.matchers);
+  if (!matchers.length){ throw 'postcss-merge-selectors: opts.matchers was specified but must not be empty.'; return; }
+  matchers.forEach(name => opts.matchers[name] = Object.assign({ name, debug : opts.debug }, DEFAULT_OPTIONS.matchers.default, opts.matchers[name]));
 
   return function (css /* , result */) {
 
-    const groupNames = Object.keys(opts.groups || DEFAULT_OPTIONS.groups);
-    groupNames.forEach(name => Object.assign({ groupName : name }, DEFAULT_OPTIONS.groups.default, opts.groups[name]));
-
-    return groupNames.forEach(name => {
-      const group = opts.groups[name];
-      css.walkRules(group.selectorFilter || DEFAULT_FILTER, selectorMerger(group));
+    return matchers.forEach(name => {
+      const matcher = opts.matchers[name];
+      if (matcher.debug) console.log('Start matcher:', matcher.name);
+      css.walkRules(matcher.selectorFilter || DEFAULT_FILTER, selectorMerger(matcher));
+      if (matcher.debug) console.log('End matcher:', matcher.name);
     })
 
   };
