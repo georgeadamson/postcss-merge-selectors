@@ -1,6 +1,6 @@
 {
   "name": "postcss-merge-selectors",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "PostCSS plugin to combine selectors that have duplicate rules. Can be configured to skip or only apply to specific rules.",
   "keywords": [
     "postcss",
@@ -23,7 +23,9 @@
   },
   "devDependencies": {
     "ava": "^0.14.0",
+    "babel-eslint": "^6.0.4",
     "eslint": "^2.10.0",
+    "eslint-config-airbnb": "^9.0.1",
     "eslint-config-postcss": "^2.0.2"
   },
   "scripts": {
