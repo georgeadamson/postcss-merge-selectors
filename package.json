@@ -1,6 +1,6 @@
 {
   "name": "postcss-merge-selectors",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PostCSS plugin to combine selectors that have duplicate rules. Can be configured to skip or only apply to specific rules.",
   "keywords": [
     "postcss",
