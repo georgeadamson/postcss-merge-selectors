@@ -19,7 +19,9 @@ After:
   .bar { left: 10px; }
 ```
 
-There be dragons: Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside when the resulting css causes styles to be applied differently. In order to group two selectors we have to move one of them. That means they may now override other rules, or other rules may now override them. I recommend you use the `selectorFilter` and `promote` options to target specific selectors and test the resulting css carefully.
+There be dragons:
+
+Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside when the resulting css causes styles to be applied differently. In order to group two selectors we have to move one of them. That means they may now override other rules, or other rules may now override them. I recommend you use the `selectorFilter` and `promote` options to target specific selectors and test the resulting css carefully.
 
 ## Usage
 
@@ -29,15 +31,24 @@ postcss([ require('postcss-merge-selectors') ])
 
 ## Options
 
+You supply a map of one or more "groups". The key for each can be any name that helps you know what it's there for.
+
+Options for each group:
+- `selectorFilter` (String|RegExp) to find several selectors as candidates for merge. Those with identical style declarations will be merged.
+- `promote` (Boolean) to place merged selectors where the last rule matching selectorFilter was found in the css. false (default) will place them all where the first match was found.
+
+Example:
 ```js
   {
-    groups : [
-      {
-        selectorFilter : /.\foo/, // (String|RegExp) to find several selectors as candidates for merge. Default /.*/ will match all so good luck with that :/
-        promote : true            // (Boolean) true to place the grouped selectors where the last match was found in the css. false (default) will place them where the first match was found.
+    groups : {
+      mergeAllMyFoobars : {
+        selectorFilter : /.\foobar/,
+        promote : true
+      },
+      someOtherMerge : {
+        ...
       }
-      ...
-    ]
+    }
   }
 ```
 
