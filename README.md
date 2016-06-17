@@ -1,6 +1,6 @@
 # PostCSS Merge Selectors [![Build Status][ci-img]][ci]
 
-[PostCSS] plugin to combine selectors that have duplicate rules. Can be configured with filters to only merge rules with specific selectors.
+[PostCSS] plugin to combine selectors that have identical rules. Can be configured to only merge rules who's selectors match specific filters.
 
 [PostCSS]: https://github.com/postcss/postcss
 [ci-img]:  https://travis-ci.org/georgeadamson/postcss-merge-selectors.svg
@@ -18,6 +18,8 @@
   .baz { left: 10px; }
 ```
 
+There be dragons: Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside when the resulting css causes styles to be applied differently. In order to group two selectors we have to move one of them. That means they may now override other rules, or other rules may now override them. I recommend you use the `selectorFilter` and `promote` options to target specific selectors and test the resulting css carefully.
+
 ## Usage
 
 ```js
@@ -30,8 +32,8 @@ postcss([ require('postcss-merge-selectors') ])
   {
     groups : [
       {
-        selectorFilter : /.\foo/, // (String|RegExp) to find several selectors as candidates for merge. Default /.*/
-        promote : true            // (Boolean) to place the grouped selectors where the last match was found in the css. Default false
+        selectorFilter : /.\foo/, // (String|RegExp) to find several selectors as candidates for merge. Default /.*/ will match all so good luck with that :/
+        promote : true            // (Boolean) true to place the grouped selectors where the last match was found in the css. false (default) will place them where the first match was found.
       }
       ...
     ]
