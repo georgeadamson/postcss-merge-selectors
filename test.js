@@ -33,8 +33,8 @@ test('Should not merge selectors that have different styles', t => {
 
 test('Should merge selectors and dedupe those with same name', t => {
   return run(t,
-    '.foo { top:0 } .bar { top: 0 } .foo { top:0 }',
-    '.foo, .bar { top:0 }',
+    '.foo { top:0 } .bar { top: 0 } .foo { top:0 } .baz { left: 10px }',
+    '.foo, .bar { top:0 } .baz { left: 10px }',
     {}
   );
 });
