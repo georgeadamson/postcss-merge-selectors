@@ -6,16 +6,17 @@
 [ci-img]:  https://travis-ci.org/georgeadamson/postcss-merge-selectors.svg
 [ci]:      https://travis-ci.org/georgeadamson/postcss-merge-selectors
 
+Before:
 ```css
   .foo { top: 0; }
-  .bar { top: 0; }
-  .baz { left: 10px; }
-  .foo { top: 0; }
+  .bar { left: 10px; }
+  .baz { top: 0; }
 ```
 
+After:
 ```css
-  .foo, .bar { top: 0; }
-  .baz { left: 10px; }
+  .foo, .baz { top: 0; }
+  .bar { left: 10px; }
 ```
 
 There be dragons: Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside when the resulting css causes styles to be applied differently. In order to group two selectors we have to move one of them. That means they may now override other rules, or other rules may now override them. I recommend you use the `selectorFilter` and `promote` options to target specific selectors and test the resulting css carefully.

@@ -43,9 +43,9 @@ test('Should merge selectors that match config group', t => {
   return run(t,
     '.foo1 { top:0 } .fooDummy { top:0 } .foo2 { top:0 } .fooDummy { top:0 }',
     '.foo1, .foo2 { top:0 } .fooDummy { top:0 } .fooDummy { top:0 }',
-    { groups : [
-      { selectorFilter : /\.foo\d+/ }
-    ]}
+    { groups : {
+      whatever : { selectorFilter : /\.foo\d+/ }
+    }}
   );
 });
 
@@ -53,9 +53,9 @@ test('Should merge selectors at the position of the last occurrence (when flag s
   return run(t,
     '.foo1 { top:0 } .bar { top:0 } .foo2 { top:0 } .bar { top:0 }',
     '.bar { top:0 } .foo1, .foo2 { top:0 } .bar { top:0 }',
-    { groups : [
-      { selectorFilter : /\.foo/, promote : true  }
-    ]}
+    { groups : {
+      whatever : { selectorFilter : /\.foo/, promote : true  }
+    }}
   );
 });
 
@@ -63,9 +63,9 @@ test('Should merge selectors at the position of the last occurrence (when flag s
   return run(t,
     '.foo1 { top:0 } .bar1 { top:0 } .foo2 { top:0 } .bar2 { top:0 }',
     '.bar1, .bar2 { top:0 } .foo1, .foo2 { top:0 }',
-    { groups : [
-      { selectorFilter : /\.foo/, promote : true  },
-      { selectorFilter : /\.bar/, promote : false }
-    ]}
+    { groups : {
+      whatever1 : { selectorFilter : /\.foo/, promote : true  },
+      whatever2 : { selectorFilter : /\.bar/, promote : false }
+    }}
   );
 });

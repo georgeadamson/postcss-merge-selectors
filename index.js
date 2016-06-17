@@ -62,24 +62,26 @@ function selectorMerger (groupOpts) {
 
 module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
 
-  const defaultOptions = {
-    groups : [
-      {
-        selectorFilter : /.*/,  // string|RegExp
+  const DEFAULT_FILTER = /.*/;
+  const DEFAULT_OPTIONS = {
+    groups : {
+      default : {
+        selectorFilter : DEFAULT_FILTER,
         promote        : false
       }
-    ]
+    }
   };
 
-  opts = opts || defaultOptions;
+  opts = Object.assign({}, DEFAULT_OPTIONS, opts);
 
   return function (css /* , result */) {
 
-    const defaultFilter = defaultOptions.groups[0].selectorFilter;
-    const groups = opts.groups && opts.groups.length > 0 ? opts.groups : defaultOptions.groups;
+    const groupNames = Object.keys(opts.groups || DEFAULT_OPTIONS.groups);
+    groupNames.forEach(name => Object.assign({ groupName : name }, DEFAULT_OPTIONS.groups.default, opts.groups[name]));
 
-    return groups.forEach(group => {
-      css.walkRules(group.selectorFilter || defaultFilter, selectorMerger(group));
+    return groupNames.forEach(name => {
+      const group = opts.groups[name];
+      css.walkRules(group.selectorFilter || DEFAULT_FILTER, selectorMerger(group));
     })
 
   };
