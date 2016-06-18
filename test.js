@@ -58,7 +58,18 @@ test('Should merge selectors that match config matcher', t => {
 });
 
 
-test('Should merge selectors at the position of the last occurrence (when flag set)', t => {
+test('Should not merge selectors that don\'t match config matcher', t => {
+  return run(t,
+    '.foo { top:0 } .bar { top:0 } .baz { top:0 }',
+    '.foo { top:0 } .bar, .baz { top:0 }',
+    { matchers : {
+      whatever : { selectorFilter : /\.(bar|baz)/ }
+    }}
+  );
+});
+
+
+test('Should merge selectors at the position of the last occurrence (when "promote" flag set)', t => {
   return run(t,
     '.foo1 { top:0 } .bar { top:0 } .foo2 { top:0 } .bar { top:0 }',
     '.bar { top:0 } .foo1, .foo2 { top:0 } .bar { top:0 }',
@@ -69,7 +80,7 @@ test('Should merge selectors at the position of the last occurrence (when flag s
 });
 
 
-test('Should merge selectors at the position of the last occurrence (when flag set)', t => {
+test('Should merge each matcher group separately', t => {
   return run(t,
     '.foo1 { top:0 } .bar1 { top:0 } .foo2 { top:0 } .bar2 { top:0 }',
     '.bar1, .bar2 { top:0 } .foo1, .foo2 { top:0 }',
