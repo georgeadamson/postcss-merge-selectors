@@ -63,7 +63,7 @@ test('Should not merge selectors that don\'t match config matcher', t => {
     '.foo { top:0 } .bar { top:0 } .baz { top:0 }',
     '.foo { top:0 } .bar, .baz { top:0 }',
     { matchers : {
-      whatever : { selectorFilter : /\.(bar|baz)/ }
+      whatever : { selectorFilter : /bar|baz/ }
     }}
   );
 });
