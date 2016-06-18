@@ -27,13 +27,14 @@ Combining selectors might satisfy your urge to be tidy, but the warm fluffy feel
 
 ```js
 var const opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
-var merger = require('postcss-merge-selectors');
-postcss([ merger(opts) ])
+var postcssMerge = require('postcss-merge-selectors');
+
+postcss([ postcssMerge(opts) ])
 ```
 
 ## Options
 
-You supply a map of one or more "matchers". The key for each can be any name that helps you know what it's there for.
+You supply a map of one or more "matchers". The key for each can be any name that'll help jog your memory when you look at your code again after returning from your holiday.
 
 Options for each matcher:
 - `selectorFilter` (String|RegExp) to find several selectors as candidates for merge. Those with identical style declarations will be merged.
