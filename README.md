@@ -23,13 +23,19 @@ After:
 
 Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside when your compact and bijou css causes styles to be applied differently. In order to merge two selectors we have to move one of them. That means they may now override other rules, or other rules may now override them. I recommend you use the `selectorFilter` and `promote` options to only target specific selectors and test the resulting css carefully.
 
+## Install
+
+```shell
+npm install postcss-merge-selectors --save-dev
+```
+
 ## Usage
 
 ```js
-var const opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
 var postcssMerge = require('postcss-merge-selectors');
+var const opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
 
-postcss([ postcssMerge(opts) ])
+postcss([ postcssMerge(opts) ]);
 ```
 
 ## Options
