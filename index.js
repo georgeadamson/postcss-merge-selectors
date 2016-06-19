@@ -4,6 +4,16 @@
 const postcss = require('postcss');
 const list    = postcss.list;
 
+const DEFAULT_MATCHER = {
+  selectorFilter : /.*/,
+  promote        : false
+};
+const DEFAULT_OPTIONS = {
+  matchers : {
+    default : DEFAULT_MATCHER
+  }
+};
+
 function byDecl (node){
   return (node || this).type === 'decl';
 }
@@ -57,26 +67,27 @@ function selectorMerger (matcherOpts) {
 
 module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
 
-  const DEFAULT_MATCHER = {
-    selectorFilter : /.*/,
-    promote        : false
-  };
-  const DEFAULT_OPTIONS = {
-    matchers : {
-      default : DEFAULT_MATCHER
-    }
-  };
-
   opts = Object.assign({}, DEFAULT_OPTIONS, opts);
   const matchers = Object.keys(opts.matchers || DEFAULT_OPTIONS.matchers);
-  if (!matchers.length){ throw 'postcss-merge-selectors: opts.matchers was specified but must not be empty.'; return; }
-  matchers.forEach(name => opts.matchers[name] = Object.assign({ name, debug : opts.debug }, DEFAULT_MATCHER, opts.matchers[name]));
+  if (!matchers.length){ throw 'postcss-merge-selectors: opts.matchers was specified but appears to be empty.'; return; }
+  
+  matchers.forEach(name => 
+    opts.matchers[name] = Object.assign(
+      { 
+        name,
+        debug          : opts.debug,
+        selectorFilter : DEFAULT_MATCHER.selectorFilter
+      },
+      DEFAULT_MATCHER,
+      opts.matchers[name]
+    )
+  );
 
   return function (css /* , result */) {
 
     return matchers.forEach(name => {
       const matcher = opts.matchers[name];
-      css.walkRules(matcher.selectorFilter || DEFAULT_FILTER, selectorMerger(matcher));
+      css.walkRules(matcher.selectorFilter, selectorMerger(matcher));
     })
 
   };
