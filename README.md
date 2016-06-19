@@ -33,7 +33,7 @@ npm install postcss-merge-selectors --save-dev
 
 ```js
 var postcssMerge = require('postcss-merge-selectors');
-var const opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
+var opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
 
 postcss([ postcssMerge(opts) ]);
 ```
@@ -41,6 +41,8 @@ postcss([ postcssMerge(opts) ]);
 ## Options
 
 You supply a map of one or more "matchers". The key for each can be any name that'll help jog your memory when you look at your code again after returning from your holiday.
+
+All the selectors found by a matcher will be merged into one or more groups if their css rules are the same.
 
 Options for each matcher:
 - `selectorFilter` (String|RegExp) to find several selectors as candidates for merge. Those with identical style declarations will be merged.
