@@ -33,8 +33,6 @@ npm install postcss-merge-selectors --save-dev
 
 ```js
 var postcssMerge = require('postcss-merge-selectors');
-var opts = { matchers : { myFoobarMerge : { selectorFilter : /foo|bar/ } } };
-
 postcss([ postcssMerge(opts) ]);
 ```
 
@@ -64,5 +62,44 @@ var opts = {
   }
 }
 ```
+
+And what is this weird *promote:true* flag about?
+
+<table>
+  <thead>
+    <tr>
+      <th>Before</th>
+      <th>After (default)</th>
+      <th>After (with promote:true)</th>
+  <tbody>
+    <tr>
+      <td>
+        <div class="highlight highlight-source-js">
+<pre>
+  .foo { top: 0; }
+  .baz { left: 10px; }
+  .bar { top: 0; }
+</pre>
+        </div>
+      </td>
+      <td>
+        <div class="highlight highlight-source-js">
+<pre>
+  .foo, .bar { top: 0; }
+  .baz { left: 10px; }
+</pre>
+        </div>
+      </td>
+      <td>
+        <div class="highlight highlight-source-css">
+<pre>
+  .baz { left: 10px; }
+  .foo, .bar { top: 0; }
+</pre>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 See [PostCSS] docs for examples for your environment.
