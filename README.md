@@ -21,7 +21,7 @@ After:
 
 ## There be dragons :(
 
-This plugin isn't smart. It hasn't got a chuffing clue what your css is trying to achieve. Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside pretty quickly when your new bijou css causes styles to be applied differently. In order to merge two selectors we have to move one of them. That means they may now override rules that used to be after them, or they may be overridden by rules that used ot be before them. I recommend you use the `selectorFilter` option to only target specific selectors and the `promote` option if you need to move the resulting selectors further down the stylesheet. Test the resulting css carefully.
+This plugin isn't smart. It hasn't got a chuffing clue what your css is trying to achieve. Combining selectors might satisfy your urge to be tidy, but the warm fluffy feeling will subside pretty quickly when your new bijou css causes styles to be applied differently. In order to merge two selectors we have to move one of them. That means they may now override rules that used to be after them, or they may be overridden by rules that used to be before them. I recommend you use the `selectorFilter` option to only target specific selectors and the `promote` option if you need to move the resulting selectors further down the stylesheet. Test the resulting css carefully.
 
 ## Install
 
@@ -77,7 +77,7 @@ And what is this weird *promote:true* flag about?
         <div class="highlight highlight-source-js">
 <pre>
   .foo { top: 0; }
-  .baz { left: 10px; }
+  .baz { top: 10px; }
   .bar { top: 0; }
 </pre>
         </div>
@@ -86,14 +86,14 @@ And what is this weird *promote:true* flag about?
         <div class="highlight highlight-source-js">
 <pre>
   .foo, .bar { top: 0; }
-  .baz { left: 10px; }
+  .baz { top: 10px; }
 </pre>
         </div>
       </td>
       <td>
         <div class="highlight highlight-source-css">
 <pre>
-  .baz { left: 10px; }
+  .baz { top: 10px; }
   .foo, .bar { top: 0; }
 </pre>
         </div>
