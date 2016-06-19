@@ -42,7 +42,9 @@ postcss([ postcssMerge(opts) ]);
 
 You supply a map of one or more "matchers". The key for each can be any name that'll help jog your memory when you look at your code again after returning from your holiday.
 
-All the selectors found by a matcher will be merged into one or more groups if their css rules are the same.
+All the selectors found by a matcher will be grouped by their css rules where they're the same.
+
+<sub>If you're into SQL then it's a bit like (psuedocode) `SELECT CONCAT(selector), styles FROM stylesheet WHERE selector LIKE '%foobar%' GROUP BY styles` (I dunno if that helps but it seemed like a good idea at the time.)</sub>
 
 Options for each matcher:
 - `selectorFilter` (String|RegExp) to find several selectors as candidates for merge. Those with identical style declarations will be merged.
