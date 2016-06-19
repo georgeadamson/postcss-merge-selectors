@@ -52,17 +52,17 @@ Options for each matcher:
 
 Example:
 ```js
-  {
-    matchers : {
-      mergeAllMyFoobars : {
-        selectorFilter : /.\foobar/,
-        promote : true
-      },
-      someOtherMerge : {
-        ...
-      }
+var opts = {
+  matchers : {
+    mergeAllMyFoobars : {
+      selectorFilter : /.\foobar/,
+      promote : true
+    },
+    someOtherMerge : {
+      ...
     }
   }
+}
 ```
 
 See [PostCSS] docs for examples for your environment.
