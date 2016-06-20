@@ -69,6 +69,17 @@ test('Should not merge selectors that don\'t match config matcher', t => {
 });
 
 
+test('Should merge selectors that are more complex than the over-simplified examples above', t => {
+  return run(t,
+    'div#foo-bar, .foo:before { margin:1rem; padding-top:1vw } [whatever] { top:10px } [data-foo="test"].bar { padding-top:1vw; margin:1rem }',
+    'div#foo-bar, .foo:before, [data-foo="test"].bar { margin:1rem; padding-top:1vw } [whatever] { top:10px }',
+    { matchers : {
+      whatever : { selectorFilter : /foo/ }
+    }}
+  );
+});
+
+
 test('Should merge selectors at the position of the last occurrence (when "promote" flag set)', t => {
   return run(t,
     '.foo1 { top:0 } .bar { top:0 } .foo2 { top:0 } .bar { top:0 }',
