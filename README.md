@@ -6,7 +6,7 @@
 [ci-img]:  https://travis-ci.org/georgeadamson/postcss-merge-selectors.svg
 [ci]:      https://travis-ci.org/georgeadamson/postcss-merge-selectors
 [npm-img]: https://badge.fury.io/js/postcss-merge-selectors.svg
-[npm]:     https://badge.fury.io/js/postcss-merge-selectors.svg)](https://badge.fury.io/js/postcss-merge-selectors
+[npm]:     https://www.npmjs.com/package/postcss-merge-selectors
 
 
 Before:
