@@ -1,4 +1,4 @@
-# PostCSS Merge Selectors [![Build Status][ci-img]][ci] [![NPM Version][npm-img]][npm]
+# PostCSS Merge Selectors [![Build Status][ci-img]][ci] [![NPM Version][npm-img]][npm] [![dependencies][dependencies-img]][dependencies]
 
 [PostCSS] plugin to combine selectors that have identical rules. Can be configured to only merge rules who's selectors match specific filters.
 
@@ -7,6 +7,8 @@
 [ci]:      https://travis-ci.org/georgeadamson/postcss-merge-selectors
 [npm-img]: https://badge.fury.io/js/postcss-merge-selectors.svg
 [npm]:     https://www.npmjs.com/package/postcss-merge-selectors
+[dependencies-img]: https://david-dm.org/georgeadamson/postcss-merge-selectors.svg
+[dependencies]:     https://david-dm.org/georgeadamson/postcss-merge-selectors
 
 
 Before:
