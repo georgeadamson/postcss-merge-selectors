@@ -109,3 +109,11 @@ test('Should merge identical selectors without being affected by comment nodes',
     '.foo1, .bar1, .foo2 {  /* comment1 */ top:0 } /* comment2 */ .bar2 { left:0 /* comment4 */ }',
   );
 });
+
+
+test('Should not merge keyframe-selectors', t => {
+  return run(t,
+    '.visible { opacity: 1; } @keyframes flash { 50%, from, to { opacity: 1; } 25%, 75% { opacity: 0; } }',
+    '.visible { opacity: 1; } @keyframes flash { 50%, from, to { opacity: 1; } 25%, 75% { opacity: 0; } }',
+  );
+});
