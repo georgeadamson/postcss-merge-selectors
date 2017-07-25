@@ -109,3 +109,51 @@ test('Should merge identical selectors without being affected by comment nodes',
     '.foo1, .bar1, .foo2 {  /* comment1 */ top:0 } /* comment2 */ .bar2 { left:0 /* comment4 */ }',
   );
 });
+
+
+test('Should not merge selectors inside at-rules with those outside', t => {
+  return run(t,
+    '.visible { opacity: 1; } @keyframes flash { 50%, from, to { opacity: 1; } 25%, 75% { opacity: 0; } }',
+    '.visible { opacity: 1; } @keyframes flash { 50%, from, to { opacity: 1; } 25%, 75% { opacity: 0; } }',
+  );
+});
+
+
+test('Should merge identical selectors inside the same at-rule', t => {
+  return run(t,
+    '@keyframes flash { 50% { opacity: 1; } 25%, 75% { opacity: 0; } from, to { opacity: 1; } }',
+    '@keyframes flash { 50%, from, to { opacity: 1; } 25%, 75% { opacity: 0; } }'
+  );
+});
+
+
+test('Should merge identical selectors inside identical at-rules', t => {
+  return run(t,
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } .c { background-color: white; } }',
+    '@media screen and (min-width: 480px) { .a, .b { background-color: black; } } @media screen and (min-width: 480px) { .c { background-color: white; } }'
+  );
+});
+
+
+test('Should not merge selectors inside different at-rules', t => {
+  return run(t,
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 481px) { .b { background-color: black; } }',
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 481px) { .b { background-color: black; } }'
+  );
+});
+
+
+test('Should delete at-rules rendered empty by merger', t => {
+  return run(t,
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } }',
+    '@media screen and (min-width: 480px) { .a, .b { background-color: black; } }'
+  );
+});
+
+
+test('Does not affect at-rules which never had children', t => {
+  return run(t,
+    '@import "other.css"',
+    '@import "other.css"'
+  );
+});

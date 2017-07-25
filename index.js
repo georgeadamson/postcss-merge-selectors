@@ -18,6 +18,19 @@ function byDecl (node){
   return (node || this).type === 'decl';
 }
 
+function serializeAtRule (rule) {
+  return `${rule.name}(${rule.params})`;
+}
+
+function serializeScope (rule) {
+  var parent = rule.parent;
+  if (parent.type === 'atrule') {
+    return `${serializeScope(parent)}${serializeAtRule(parent)}>`;
+  } else {
+    return '';
+  }
+}
+
 function serialiseDeclarations (rule) {
   var nodes = rule.nodes ? rule.nodes.filter(byDecl).sort().map(String) : [];
   return nodes.join(';').replace(/\s+/g,'');
@@ -28,12 +41,22 @@ function unique (value, index, self) {
   return self.indexOf(value) === index;
 }
 
+function removeRule (rule) {
+  // Remove the entire parent rule (recursively) if this was the last child left
+  if (rule.parent.nodes.length === 1 && rule.parent.type !== 'root') {
+    removeRule(rule.parent);
+  // Otherwise just remove this rule
+  } else {
+    rule.remove();
+  }
+}
+
 function selectorMerger (matcherOpts) {
   const cache = {};
 
   return function analyseRule (ruleB) {
 
-    const decl = serialiseDeclarations(ruleB);
+    const decl = serializeScope(ruleB) + serialiseDeclarations(ruleB);
 
     if (cache[decl]) {
 
@@ -45,12 +68,12 @@ function selectorMerger (matcherOpts) {
       // Prepend selector to the most recent rule if desired:
       if (matcherOpts.promote){
         ruleB.selector = mergedSelector;
-        ruleA.remove();
+        removeRule(ruleA);
         cache[decl] = ruleB;
       // Otherwise append selector to the rule we found first:
       } else {
         ruleA.selector = mergedSelector;
-        ruleB.remove();
+        removeRule(ruleB);
       }
 
     } else {
@@ -70,10 +93,10 @@ module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
   opts = Object.assign({}, DEFAULT_OPTIONS, opts);
   const matchers = Object.keys(opts.matchers || DEFAULT_OPTIONS.matchers);
   if (!matchers.length){ throw 'postcss-merge-selectors: opts.matchers was specified but appears to be empty.'; return; }
-  
-  matchers.forEach(name => 
+
+  matchers.forEach(name =>
     opts.matchers[name] = Object.assign(
-      { 
+      {
         name,
         debug          : opts.debug,
         selectorFilter : DEFAULT_MATCHER.selectorFilter
