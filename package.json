@@ -29,7 +29,7 @@
     "eslint-config-postcss": "^2.0.2"
   },
   "scripts": {
-    "test": "ava && eslint *.js"
+    "test": "ava --verbose && eslint *.js"
   },
   "eslintConfig": {
     "extends": "eslint-config-postcss/es5"
