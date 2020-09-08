@@ -24,7 +24,7 @@ test('Should merge adjacent selectors that have identical styles', t => {
   return run(t,
     '.foo { width:0; height:0 } .bar { height:0; width:0 }',
     '.foo, .bar { width:0; height:0 }',
-    { }
+    {}
   );
 });
 
