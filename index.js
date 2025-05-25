@@ -1,9 +1,6 @@
 
 // Postcss api docs: https://github.com/postcss/postcss/blob/master/docs/api.md
 
-const postcss = require('postcss');
-const list    = postcss.list;
-
 const DEFAULT_MATCHER = {
   selectorFilter : /.*/,
   promote        : false
@@ -51,7 +48,7 @@ function removeRule (rule) {
   }
 }
 
-function selectorMerger (matcherOpts) {
+function selectorMerger (matcherOpts, { list }) { // Added { list } here
   const cache = {};
 
   return function analyseRule (ruleB) {
@@ -61,9 +58,9 @@ function selectorMerger (matcherOpts) {
     if (cache[decl]) {
 
       const ruleA = cache[decl];
-      const a = list.comma(ruleA.selector);
-      const b = list.comma(ruleB.selector);
-      const mergedSelector = a.concat(b).filter(unique).join(', ');
+      const selectorA = list.comma(ruleA.selector); // Renamed 'a' to 'selectorA' for clarity
+      const selectorB = list.comma(ruleB.selector); // Renamed 'b' to 'selectorB' for clarity
+      const mergedSelector = selectorA.concat(selectorB).filter(unique).join(', ');
 
       // Prepend selector to the most recent rule if desired:
       if (matcherOpts.promote){
@@ -88,30 +85,36 @@ function selectorMerger (matcherOpts) {
 
 }
 
-module.exports = postcss.plugin('postcss-merge-selectors', function (opts) {
-
+const plugin = (opts = {}) => {
   opts = Object.assign({}, DEFAULT_OPTIONS, opts);
   const matchers = Object.keys(opts.matchers || DEFAULT_OPTIONS.matchers);
-  if (!matchers.length){ throw 'postcss-merge-selectors: opts.matchers was specified but appears to be empty.'; return; }
+  if (!matchers.length) {
+    throw new Error('postcss-merge-selectors: opts.matchers was specified but appears to be empty.');
+    // No return needed after throw
+  }
 
-  matchers.forEach(name =>
+  matchers.forEach(name => {
     opts.matchers[name] = Object.assign(
       {
         name,
-        debug          : opts.debug,
-        selectorFilter : DEFAULT_MATCHER.selectorFilter
+        debug: opts.debug,
+        selectorFilter: DEFAULT_MATCHER.selectorFilter
       },
       DEFAULT_MATCHER,
       opts.matchers[name]
-    )
-  );
+    );
+  });
 
-  return function (css /* , result */) {
-
-    return matchers.forEach(name => {
-      const matcher = opts.matchers[name];
-      css.walkRules(matcher.selectorFilter, selectorMerger(matcher));
-    })
-
+  return {
+    postcssPlugin: 'postcss-merge-selectors',
+    Once(root, { list }) { // Pass list here
+      matchers.forEach(name => {
+        const matcher = opts.matchers[name];
+        // Pass list to selectorMerger
+        root.walkRules(matcher.selectorFilter, selectorMerger(matcher, { list }));
+      });
+    }
   };
-});
+};
+plugin.postcss = true;
+module.exports = plugin;

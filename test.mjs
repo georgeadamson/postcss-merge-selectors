@@ -1,9 +1,9 @@
 import postcss from 'postcss';
 import test    from 'ava';
-import plugin  from './';
+import plugin  from './index.js';
 
 function run (t, input, expected, opts = { }) {
-  return postcss([ plugin(opts) ]).process(input)
+  return postcss([ plugin(opts) ]).process(input, { from: undefined })
     .then(result => {
       t.deepEqual(result.css, expected);
       t.deepEqual(result.warnings().length, 0);
