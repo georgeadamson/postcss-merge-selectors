@@ -18,20 +18,29 @@
     "url": "https://github.com/georgeadamson/postcss-merge-selectors/issues"
   },
   "homepage": "https://github.com/georgeadamson/postcss-merge-selectors",
-  "dependencies": {
-    "postcss": "^5.0.21"
-  },
   "devDependencies": {
-    "ava": "^0.14.0",
-    "babel-eslint": "^6.0.4",
-    "eslint": "^2.10.0",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-config-postcss": "^2.0.2"
+    "@eslint/eslintrc": "^3.3.1",
+    "@logux/eslint-config": "^49.0.0",
+    "ava": "^6.3.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^9.27.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-postcss": "^4.0.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prefer-let": "^4.0.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-unicorn": "^59.0.1"
+  },
+  "dependencies": {
+    "postcss": "^8.5.3"
   },
   "scripts": {
-    "test": "ava && eslint *.js"
-  },
-  "eslintConfig": {
-    "extends": "eslint-config-postcss/es5"
+    "test": "ava && eslint ."
   }
 }
