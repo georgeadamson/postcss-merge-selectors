@@ -1,4 +1,4 @@
-# PostCSS Merge Selectors [![Build Status][ci-img]][ci] [![NPM Version][npm-img]][npm] [![dependencies][dependencies-img]][dependencies]
+# PostCSS Merge Selectors [![Build Status][ci-img]][ci] [![NPM Version][npm-img]][npm] 
 
 [PostCSS] plugin to combine selectors that have identical rules. Can be configured to only merge rules who's selectors match specific filters.
 
