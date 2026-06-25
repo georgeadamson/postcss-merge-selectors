@@ -41,7 +41,7 @@
   "scripts": {
     "coverage": "node --test --experimental-test-coverage test.mjs",
     "test": "node --test test.mjs && eslint .",
-    "prepublishOnly": "npm test",
+    "prepublishOnly": "npm test && npm run bump",
     "bump": "npm version patch && git push"
   }
 }
