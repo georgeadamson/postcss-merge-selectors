@@ -39,6 +39,70 @@ test('Should not merge selectors that have different styles', () => {
 });
 
 
+test('Should not merge selectors when duplicate declaration order differs', () => {
+  return run(
+    '.foo { color:red; color:blue } .bar { color:blue; color:red }',
+    '.foo { color:red; color:blue } .bar { color:blue; color:red }'
+  );
+});
+
+
+test('Should not merge selectors when quoted value whitespace differs', () => {
+  return run(
+    '.foo::before { content:"a  b" } .bar::before { content:"a b" }',
+    '.foo::before { content:"a  b" } .bar::before { content:"a b" }'
+  );
+});
+
+
+test('Should only merge important declarations with matching importance', () => {
+  return run(
+    '.foo { color:red !important } .bar { color:red !important } .baz { color:red }',
+    '.foo, .bar { color:red !important } .baz { color:red }'
+  );
+});
+
+
+test('Should not merge selectors when shorthand and longhand order differs', () => {
+  return run(
+    '.foo { margin:0; margin-left:1px } .bar { margin-left:1px; margin:0 }',
+    '.foo { margin:0; margin-left:1px } .bar { margin-left:1px; margin:0 }'
+  );
+});
+
+
+test('Should not merge selectors when all shorthand changes declaration order', () => {
+  return run(
+    '.foo { all:unset; color:red } .bar { color:red; all:unset }',
+    '.foo { all:unset; color:red } .bar { color:red; all:unset }'
+  );
+});
+
+
+test('Should not merge selectors when declaration order changes before all shorthand', () => {
+  return run(
+    '.foo { color:red; all:unset } .bar { all:unset; color:red }',
+    '.foo { color:red; all:unset } .bar { all:unset; color:red }'
+  );
+});
+
+
+test('Should merge all shorthand with custom properties when order is independent', () => {
+  return run(
+    '.foo { all:unset; --theme-color:red } .bar { --theme-color:red; all:unset }',
+    '.foo, .bar { all:unset; --theme-color:red }'
+  );
+});
+
+
+test('Should merge custom properties when declaration order is independent', () => {
+  return run(
+    '.foo { --theme-color:red; --theme-size:1rem } .bar { --theme-size:1rem; --theme-color:red }',
+    '.foo, .bar { --theme-color:red; --theme-size:1rem }'
+  );
+});
+
+
 test('Should merge selectors and dedupe those with same name', () => {
   return run(
     '.foo { top:0 } .bar { top: 0 } .foo { top:0 } .baz { left: 10px }',
@@ -183,6 +247,38 @@ test('Should not merge identical selectors inside different nested at-rules', ()
   return run(
     '@media screen { @supports (display: grid) { .a { color: red } } } @media print { @supports (display: grid) { .b { color: red } } }',
     '@media screen { @supports (display: grid) { .a { color: red } } } @media print { @supports (display: grid) { .b { color: red } } }'
+  );
+});
+
+
+test('Should not merge parent selectors when nested rule bodies differ', () => {
+  return run(
+    '.foo { color:red; & .child { color: blue } } .bar { color:red; & .child { color: green } }',
+    '.foo { color:red; & .child { color: blue } } .bar { color:red; & .child { color: green } }'
+  );
+});
+
+
+test('Should not merge nested selectors from different parent selector scopes', () => {
+  return run(
+    '.foo { & .shared { color:red } & .only-foo { color:blue } } .bar { & .shared { color:red } & .only-bar { color:blue } }',
+    '.foo { & .shared { color:red } & .only-foo { color:blue } } .bar { & .shared { color:red } & .only-bar { color:blue } }'
+  );
+});
+
+
+test('Should merge parent selectors when nested rule bodies match', () => {
+  return run(
+    '.foo { color:red; & .child { color: blue } } .bar { color:red; & .child { color: blue } }',
+    '.foo, .bar { color:red; & .child { color: blue } }'
+  );
+});
+
+
+test('Should not merge parent selectors when nested at-rule bodies differ', () => {
+  return run(
+    '.foo { color:red; @media screen { color: blue } } .bar { color:red; @media print { color: blue } }',
+    '.foo { color:red; @media screen { color: blue } } .bar { color:red; @media print { color: blue } }'
   );
 });
 
