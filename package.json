@@ -2,14 +2,25 @@
   "name": "postcss-merge-selectors",
   "version": "0.0.8",
   "description": "PostCSS plugin to combine selectors that have duplicate rules. Can be configured to skip or only apply to specific rules.",
+  "main": "index.js",
+  "exports": "./index.js",
+  "files": [
+    "index.js",
+    "CHANGELOG.md"
+  ],
   "keywords": [
     "postcss",
-    "css",
     "postcss-plugin",
+    "css",
+    "css-optimization",
+    "css-refactor",
+    "selectors",
+    "merge-selectors",
+    "combine-selectors",
     "dedupe",
-    "merge",
-    "selector",
-    "rules"
+    "deduplicate",
+    "duplicate-rules",
+    "stylesheet"
   ],
   "author": "George Adamson <george@adamson.com",
   "license": "MIT",
@@ -21,13 +32,16 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.5.0",
-    "globals": "^17.7.0"
-  },
-  "dependencies": {
+    "globals": "^17.7.0",
     "postcss": "^8.5.15"
   },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
+  },
   "scripts": {
-    "test": "node --test  --experimental-test-coverage test.mjs && eslint .",
+    "coverage": "node --test --experimental-test-coverage test.mjs",
+    "test": "node --test test.mjs && eslint .",
+    "prepublishOnly": "npm test",
     "bump": "npm version patch && git push"
   }
 }
