@@ -19,28 +19,15 @@
   },
   "homepage": "https://github.com/georgeadamson/postcss-merge-selectors",
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@logux/eslint-config": "^49.0.0",
-    "ava": "^6.3.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^9.27.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-postcss": "^4.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.11.0",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prefer-let": "^4.0.0",
-    "eslint-plugin-promise": "^7.2.1",
-    "eslint-plugin-security": "^3.0.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-unicorn": "^59.0.1"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
+    "globals": "^17.7.0"
   },
   "dependencies": {
-    "postcss": "^8.5.3"
+    "postcss": "^8.5.15"
   },
   "scripts": {
-    "test": "ava && eslint ."
+    "test": "node --test  --experimental-test-coverage test.mjs && eslint .",
+    "bump": "npm version patch && git push"
   }
 }

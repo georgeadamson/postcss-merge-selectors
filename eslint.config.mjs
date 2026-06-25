@@ -1,26 +1,23 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import globals from "globals"; // For specifying global variables like 'test' from ava
-
-const compat = new FlatCompat();
+import js from "@eslint/js";
+import globals from "globals";
 
 export default [
-    // Configuration for .js files (e.g., index.js) using eslint-config-postcss
-    {
-        files: ["**/*.js"],
-        ...compat.extends("eslint-config-postcss").reduce((acc, config) => ({...acc, ...config}), {}) // compat.extends returns an array
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "commonjs",
+      globals: globals.node
     },
-    // Configuration for .mjs files (e.g., test.mjs)
-    {
-        files: ["**/*.mjs"],
-        languageOptions: {
-            ecmaVersion: "latest",
-            sourceType: "module",
-            globals: {
-                ...globals.node, // or globals.browser if appropriate, ava tests run in node
-                test: "readonly" // ava's test function
-            }
-        },
-        // Add any specific rules for .mjs files here if needed
-        // If no specific rules, ESLint's recommended rules might apply by default if not overridden
-    }
+    rules: js.configs.recommended.rules
+  },
+  {
+    files: ["**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node
+    },
+    rules: js.configs.recommended.rules
+  }
 ];
