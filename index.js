@@ -54,25 +54,6 @@ function serializeAtRule (rule) {
   return `${rule.name}(${rule.params})`;
 }
 
-function serializeScopeNode (node) {
-  if (node.type === 'atrule') {
-    return serializeAtRule(node);
-  } else if (node.type === 'rule') {
-    return `rule(${normalizeText(node.selector)})`;
-  } else {
-    return `${node.type}(${normalizeText(node.toString())})`;
-  }
-}
-
-function serializeScope (rule) {
-  var parent = rule.parent;
-  if (parent && parent.type !== 'root') {
-    return `${serializeScope(parent)}${serializeScopeNode(parent)}>`;
-  } else {
-    return '';
-  }
-}
-
 function serializeDeclaration (decl) {
   const important = decl.important ? '!important' : '';
   return `decl(${normalizeProperty(decl.prop)}:${normalizeText(decl.value)}${important})`;
@@ -161,14 +142,24 @@ function removeRule (rule) {
 }
 
 function selectorMerger (matcherOpts, { list }) {
-  const cache = new Map();
+  const cachesByParent = new WeakMap();
+
+  function cacheForParent (parent) {
+    let cache = cachesByParent.get(parent);
+    if (!cache) {
+      cache = new Map();
+      cachesByParent.set(parent, cache);
+    }
+    return cache;
+  }
 
   return function analyseRule (ruleB) {
     if (!isAttachedToRoot(ruleB)) {
       return;
     }
 
-    const decl = serializeScope(ruleB) + serialiseBody(ruleB);
+    const cache = cacheForParent(ruleB.parent);
+    const decl = serialiseBody(ruleB);
     const ruleA = cache.get(decl);
 
     if (ruleA && isAttachedToRoot(ruleA)) {

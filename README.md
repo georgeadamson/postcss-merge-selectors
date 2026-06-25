@@ -29,7 +29,7 @@ This plugin is less smart than your browser. Combining selectors might satisfy y
 
 In order to merge two selectors, one of the rules has to go away. That means its selector moves to another rule, and that can change which declarations win. Use the `selectorFilter` option to target selectors you understand, use `promote` if the merged rule needs to move further down the stylesheet, and test the resulting CSS carefully.
 
-The plugin does try not to do obviously unsafe things. It compares rule bodies before merging, and avoids merging when declaration order can affect behavior, such as duplicate properties, shorthand/longhand pairs, `all`, differing `!important`, differing quoted value whitespace, or differing nested rule bodies. Comments do not affect matching.
+The plugin does try not to do obviously unsafe things. It compares rule bodies before merging, and avoids merging when declaration order can affect behavior, such as duplicate properties, shorthand/longhand pairs, `all`, differing `!important`, differing quoted value whitespace, or differing nested rule bodies. Comments do not affect matching. Rules inside `@media`, `@supports`, and other at-rules are only merged with sibling rules in the same block, so separate media queries keep their own position in the stylesheet even when their parameters match.
 
 ## Install
 

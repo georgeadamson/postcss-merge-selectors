@@ -219,10 +219,18 @@ test('Should merge identical selectors inside the same at-rule', () => {
 });
 
 
-test('Should merge identical selectors inside identical at-rules', () => {
+test('Should merge identical selectors inside the same media query', () => {
+  return run(
+    '@media screen and (min-width: 480px) { .a { background-color: black; } .b { background-color: black; } .c { background-color: white; } }',
+    '@media screen and (min-width: 480px) { .a, .b { background-color: black; } .c { background-color: white; } }'
+  );
+});
+
+
+test('Should not merge selectors across separate identical media queries', () => {
   return run(
     '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } .c { background-color: white; } }',
-    '@media screen and (min-width: 480px) { .a, .b { background-color: black; } } @media screen and (min-width: 480px) { .c { background-color: white; } }'
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } .c { background-color: white; } }'
   );
 });
 
@@ -235,10 +243,18 @@ test('Should not merge selectors inside different at-rules', () => {
 });
 
 
-test('Should merge identical selectors inside identical nested at-rules', () => {
+test('Should merge identical selectors inside the same nested at-rule context', () => {
+  return run(
+    '@media screen { @supports (display: grid) { .a { color: red } .b { color: red } } }',
+    '@media screen { @supports (display: grid) { .a, .b { color: red } } }'
+  );
+});
+
+
+test('Should not merge selectors across separate identical nested at-rules', () => {
   return run(
     '@media screen { @supports (display: grid) { .a { color: red } } } @media screen { @supports (display: grid) { .b { color: red } } }',
-    '@media screen { @supports (display: grid) { .a, .b { color: red } } }'
+    '@media screen { @supports (display: grid) { .a { color: red } } } @media screen { @supports (display: grid) { .b { color: red } } }'
   );
 });
 
@@ -283,10 +299,10 @@ test('Should not merge parent selectors when nested at-rule bodies differ', () =
 });
 
 
-test('Should delete at-rules rendered empty by merger', () => {
+test('Should preserve separate media queries that would become empty by cross-block merging', () => {
   return run(
     '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } }',
-    '@media screen and (min-width: 480px) { .a, .b { background-color: black; } }'
+    '@media screen and (min-width: 480px) { .a { background-color: black; } } @media screen and (min-width: 480px) { .b { background-color: black; } }'
   );
 });
 
